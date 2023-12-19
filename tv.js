@@ -30,7 +30,17 @@ form.addEventListener('submit', async function (e) {
     const res = await axios.get(`https://api.tvmaze.com/search/shows`, config);
     console.log(res.data);
     makeImages(res.data);
+
+if(form.elements.search.value=''){
+
+h1.innerText = 'TV SHOW APP';
+
+}
+else{
+
     h1.innerText = form.elements.search.value;
+
+}
     form.elements.search.value = "";
 });
 
