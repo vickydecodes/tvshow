@@ -2,6 +2,9 @@ const form = document.querySelector('#tvsearch');
 const input = document.querySelector('#search');
 const space = document.querySelector('#container-fluid');
 const rgbbtn = document.querySelector('#change');
+const h1 = document.querySelector('#h1');
+
+
 rgbbtn.addEventListener('click',function(){
     document.body.style.backgroundColor = 'black';
     document.body.style.color = 'white';
@@ -27,6 +30,7 @@ form.addEventListener('submit', async function (e) {
     const res = await axios.get(`https://api.tvmaze.com/search/shows`, config);
     console.log(res.data);
     makeImages(res.data);
+    h1.innerText = form.elements.search.value;
     form.elements.search.value = "";
 });
 
