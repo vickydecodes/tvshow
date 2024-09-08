@@ -4,4 +4,4 @@ This is a website that we can search for Tv shows that fetches the data from the
 
 ## To visit
 
-[Click here](https://vicky-at-web.github.io/tvshow/tv.html)
+[Click here](https://vickydecodes.github.io/tvshow/tv.html)
