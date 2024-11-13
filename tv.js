@@ -1,109 +1,71 @@
 const form = document.querySelector('#tvsearch');
 const input = document.querySelector('#search');
-const space = document.querySelector('#container-fluid');
 const rgbbtn = document.querySelector('#change');
+const movieContainer = document.querySelector('.movie-container');
 const h1 = document.querySelector('#h1');
 
-
-rgbbtn.addEventListener('click',function(){
-    document.body.style.backgroundColor = 'black';
-    document.body.style.color = 'white';
-    const sun = document.createElement('button');
-    sun.setAttribute('class','btn btn-primary mt-3');
-    sun.innerText = 'light-mode';
-    rgbbtn.remove();
-    form.append(sun);
-    sun.addEventListener('click',function(){
-    document.body.style.backgroundColor = 'white';
-    document.body.style.color = 'black';
-    sun.remove();
-    form.append(rgbbtn);
-    })
-   
-})
-
+// Toggle between light and dark mode
+rgbbtn.addEventListener('click', function () {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+});
 
 form.addEventListener('submit', async function (e) {
     e.preventDefault();
-    const searchTerm = form.elements.search.value;
+    const searchTerm = input.value.toUpperCase();
     const config = { params: { q: searchTerm } };
     const res = await axios.get(`https://api.tvmaze.com/search/shows`, config);
-    console.log(res.data);
+    
+    h1.innerText = searchTerm ? searchTerm : 'TV SHOW APP';
+    input.value = "";
+    
     makeImages(res.data);
-
-if(form.elements.search.value=''){
-
-h1.innerText = 'TV SHOW APP';
-
-}
-else{
-
-    h1.innerText = form.elements.search.value;
-
-}
-    form.elements.search.value = "";
 });
 
+const makeCard = (details) => {
+    const card = document.createElement('div');
+    card.classList.add('card', 'my-3'); 
+    card.style.width = '600px'
 
-
+    card.innerHTML = `
+        <div class="row g-0 w-100">
+            <div class="col-md-4 d-flex justify-content-center">
+                <img src="${details.img}" class="img-fluid rounded-start" alt="${details.title}">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title"><b>${details.title}</b></h5>
+                    <p class="card-text">Rating: ${details.rating || 'N/A'}</p>
+                    <p class="card-text">Language: ${details.language}</p>
+                    <p class="card-text">Genre: ${details.genres.join(', ')}</p>
+                    <p class="card-text">Premiered: ${details.premiered || 'N/A'}</p>
+                    <p class="card-text">Status: ${details.status}</p>
+                </div>
+            </div>
+        </div>
+    `;
+    return card;
+}
 
 const makeImages = (shows) => {
-    for (let result of shows) {
+    movieContainer.innerHTML = '';
+
+    shows.forEach(result => {
         if (result.show.image) {
-            const img = document.createElement('img');
-            img.src = result.show.image.medium;
-            img.setAttribute('class', 'img-fluid');
-            const p = document.createElement('p');
-            const p2 = document.createElement('p');
-            const p3 = document.createElement('p');
-            const p4 = document.createElement('p');
-            const p5 = document.createElement('p');
-            const p6 = document.createElement('p');
-            const p7 = document.createElement('p');
-            const br = document.createElement('br')
-            const show = result.show.name;
-            const rating = result.show.rating.average;
-            const lang = result.show.language;
-            const genres = result.show.genres;
-            const aired = result.show.premiered;
-            const status = result.show.status;
-            // const avl = result.show.webChannel.name;
-            p.innerText = `Name: ${show}`;
-            p2.innerText = `Rating: ${rating}`;
-            p3.innerText = `Language: ${lang}`;
-            p4.innerText = `Genre: ${genres}`;
-            p5.innerText = `Premiered: ${aired}`;
-            p6.innerText = `Status: ${status}`
-            // p6.innerText = `Available on: ${avl}`
-            const newshow = document.createElement('div');
-            const details = document.createElement('div');
-            details.setAttribute('class', 'container-fluid');
-            p.setAttribute('class', 'container-fluid');
-            p2.setAttribute('class', 'container-fluid');
-            p3.setAttribute('class', 'container-fluid');
-            p4.setAttribute('class', 'container-fluid');
-            p5.setAttribute('class', 'container-fluid');
-            p6.setAttribute('class', 'container-fluid');
-
-            newshow.setAttribute('class', 'container-fluid mt-3');
-            details.append(p);
-            details.append(p2);
-            details.append(p3);
-            details.append(p4);
-            details.append(p5);
-            details.append(p6);
-            newshow.append(img);
-            newshow.append(details);
-            newshow.setAttribute('id', 'newshow');
-
-
-
-            document.body.childNodes[1].childNodes[5].append(newshow);
+            const show = result.show;
+            const details = {
+                img: show.image.medium,
+                title: show.name,
+                rating: show.rating.average || 'N/A',
+                language: show.language,
+                genres: show.genres,
+                premiered: show.premiered,
+                status: show.status
+            };
+            
+            const card = makeCard(details);
+            movieContainer.append(card);
         }
-
-    }
+    });
 }
-const btn = document.querySelector('#clear');
-btn.addEventListener('click', function () {
-        document.body.childNodes[1].childNodes[5].innerText = '';
-});

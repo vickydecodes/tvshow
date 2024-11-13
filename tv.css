@@ -1,0 +1,53 @@
+
+:root {
+    --bg-color: #ffffff;
+    --text-color: #000000;
+    --card-bg-color: #ffffff;
+    --card-text-color: #000000;}
+
+/* Dark Theme */
+html[data-theme="dark"] {
+    --bg-color: #121212;
+    --text-color: #ffffff;
+    --card-bg-color: #333333;
+    --card-text-color: #ffffff;
+}
+
+body {
+    font-family: "Geist Mono", serif;
+
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.card {
+    background-color: var(--card-bg-color) !important;
+    color: var(--card-text-color) !important;
+}
+
+.card .text-body-secondary {
+    color: var(--card-text-color) !important;
+}
+
+
+#newshow {
+    display: flex;
+    flex-direction: row;
+}
+
+#sec {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+p {
+    display: flex;
+    flex-direction: column;
+    margin-left: 15px;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+}
